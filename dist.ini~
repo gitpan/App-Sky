@@ -20,7 +20,8 @@ testing_command = runtest
 [MetaResources]
 bugtracker.web = http://rt.cpan.org/NoAuth/Bugs.html?Dist=App-Sky
 bugtracker.mailto = bug-app-sky@rt.cpan.org
-repository.url = ssh://hg@bitbucket.org/shlomif/perl-App-Sky
-repository.web = http://bitbucket.org/shlomif/perl-App-Sky
-repository.type = hg
+repository.url = git://github.com/shlomif/Sky-uploader.git
+repository.web = https://github.com/shlomif/Sky-uploader
+repository.type = git
 [PodWeaver]
+[Test::CPAN::Changes]

@@ -22,6 +22,7 @@ lib/App/Sky/Module.pm
 lib/App/Sky/Module.pm~
 lib/App/Sky/Results.pm
 lib/App/Sky/Results.pm~
+scripts/bump-version-number.pl
 t/manager.t
 t/manager.t~
 t/module.t

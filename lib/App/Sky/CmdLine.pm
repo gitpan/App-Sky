@@ -3,7 +3,7 @@ package App::Sky::CmdLine;
 use strict;
 use warnings;
 
-our $VERSION = '0.0.1';
+our $VERSION = '0.0.2';
 
 
 use Carp ();
@@ -185,7 +185,7 @@ App::Sky::CmdLine - command line program
 
 =head1 VERSION
 
-version 0.0.1
+version 0.0.2
 
 =encoding utf8
 
@@ -332,8 +332,8 @@ The code is open to the world, and available for you to hack on. Please feel fre
 with it, or whatever. If you want to contribute patches, please send me a diff or prod me to pull
 from your repository :)
 
-L<http://bitbucket.org/shlomif/perl-App-Sky>
+L<https://github.com/shlomif/Sky-uploader>
 
-  hg clone ssh://hg@bitbucket.org/shlomif/perl-App-Sky
+  git clone git://github.com/shlomif/Sky-uploader.git
 
 =cut
