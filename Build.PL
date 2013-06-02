@@ -20,7 +20,7 @@ my %module_build_args = (
     "Shlomi Fish <shlomif\@cpan.org>"
   ],
   "dist_name" => "App-Sky",
-  "dist_version" => "0.0.4",
+  "dist_version" => "0.0.5",
   "license" => "mit",
   "module_name" => "App::Sky",
   "recommends" => {},
