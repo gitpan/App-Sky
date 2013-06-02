@@ -3,7 +3,7 @@ package App::Sky::Manager;
 use strict;
 use warnings;
 
-our $VERSION = '0.0.3';
+our $VERSION = '0.0.4';
 
 
 use Carp ();
@@ -126,7 +126,7 @@ App::Sky::Manager - manager for the configuration.
 
 =head1 VERSION
 
-version 0.0.3
+version 0.0.4
 
 =encoding utf8
 

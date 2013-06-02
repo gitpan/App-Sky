@@ -7,6 +7,7 @@ use lib qw{inc}; use Test::Run::Builder;
 
 my %module_build_args = (
   "build_requires" => {
+    "File::Spec" => 0,
     "Module::Build" => "0.3601",
     "Test::Differences" => 0,
     "Test::More" => 0
@@ -19,7 +20,7 @@ my %module_build_args = (
     "Shlomi Fish <shlomif\@cpan.org>"
   ],
   "dist_name" => "App-Sky",
-  "dist_version" => "0.0.3",
+  "dist_version" => "0.0.4",
   "license" => "mit",
   "module_name" => "App::Sky",
   "recommends" => {},

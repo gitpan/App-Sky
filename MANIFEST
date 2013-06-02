@@ -14,6 +14,8 @@ lib/App/Sky.pm
 lib/App/Sky.pm~
 lib/App/Sky/CmdLine.pm
 lib/App/Sky/CmdLine.pm~
+lib/App/Sky/Config/Validate.pm
+lib/App/Sky/Config/Validate.pm~
 lib/App/Sky/Exception.pm
 lib/App/Sky/Exception.pm~
 lib/App/Sky/Manager.pm
@@ -23,6 +25,9 @@ lib/App/Sky/Module.pm~
 lib/App/Sky/Results.pm
 lib/App/Sky/Results.pm~
 scripts/bump-version-number.pl
+t/config-validate.t
+t/config-validate.t~
+t/data/sample-configs/shlomif1/config.yaml
 t/manager.t
 t/manager.t~
 t/module.t

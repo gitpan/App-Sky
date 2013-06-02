@@ -1,4 +1,4 @@
-package App::Sky::Module;
+package App::Sky::Config::Validate;
 
 use strict;
 use warnings;
@@ -11,66 +11,115 @@ use Carp ();
 use Moo;
 use MooX 'late';
 
-use URI;
-use File::Basename qw(basename);
+use Scalar::Util qw(reftype);
+use List::MoreUtils qw(notall);
 
-use List::MoreUtils qw( uniq );
-
-use App::Sky::Results;
-use App::Sky::Exception;
-
-has base_upload_cmd => (isa => 'ArrayRef[Str]', is => 'ro',);
-has dest_upload_prefix => (isa => 'Str', is => 'ro',);
-has dest_upload_url_prefix => (isa => 'Str', is => 'ro',);
+has 'config' => (isa => 'HashRef', is => 'ro', required => 1,);
 
 
-sub get_upload_results
+sub _sorted_keys
 {
-    my ($self, $args) = @_;
+    my $hash_ref = shift;
 
-    my $filenames = $args->{filenames}
-        or Carp::confess ("Missing argument 'filenames'");
+    return sort {$a cmp $b } keys(%$hash_ref);
+}
 
-    if (@$filenames != 1)
+sub _validate_section
+{
+    my ($self, $site_name, $sect_name, $sect_conf) = @_;
+
+    foreach my $string_key (qw( basename_re target_dir))
     {
-        Carp::confess ("More than one file passed to 'filenames'");
+        my $v = $sect_conf->{$string_key};
+
+        if (not (
+                defined($v)
+                &&
+                ref($v) eq ''
+                &&
+                $v =~ /\S/
+            ))
+        {
+        die "Section '$sect_name' at site '$site_name' must contain a non-empty $string_key";
+        }
     }
 
-    my $target_dir = $args->{target_dir}
-        or Carp::confess ("Missing argument 'target_dir'");
+    return;
+}
 
-    my $invalid_chars_re = qr/[:]/;
+sub _validate_site
+{
+    my ($self, $site_name, $site_conf) = @_;
 
-    my @invalid_chars = (map { split( //, $_) } map { /($invalid_chars_re)/g } @$filenames);
-
-    if (@invalid_chars)
+    my $base_upload_cmd = $site_conf->{base_upload_cmd};
+    if (ref ($base_upload_cmd) ne 'ARRAY')
     {
-        App::Sky::Exception::Upload::Filename::InvalidChars->throw(
-            invalid_chars =>
-            [sort { $a cmp $b } uniq(@invalid_chars)],
+        die "base_upload_cmd for site '$site_name' is not an array.";
+    }
+
+    if (notall { defined($_) && ref($_) eq '' } @$base_upload_cmd)
+    {
+        die "base_upload_cmd for site '$site_name' must contain only strings.";
+    }
+
+    foreach my $kk (qw(dest_upload_prefix dest_upload_url_prefix))
+    {
+        my $s = $site_conf->{$kk};
+        if (not
+            (
+                defined($s) && (ref($s) eq '') && ($s =~ m/\S/)
+            )
+        )
+        {
+            die "$kk for site '$site_name' is not a string.";
+        }
+    }
+
+
+
+    my $sections = $site_conf->{sections};
+    if (ref ($sections) ne 'HASH')
+    {
+        die "Sections for site '$site_name' is not a hash.";
+    }
+
+    foreach my $sect_name (_sorted_keys($sections))
+    {
+        $self->_validate_section(
+            $site_name, $sect_name, $sections->{$sect_name}
         );
     }
 
-    return App::Sky::Results->new(
-        {
-            upload_cmd =>
-            [
-                @{$self->base_upload_cmd()},
-                @$filenames,
-                ($self->dest_upload_prefix() . $target_dir),
-            ],
-            urls =>
-            [
-                URI->new(
-                    $self->dest_upload_url_prefix()
-                    . $target_dir
-                    . basename($filenames->[0])
-                ),
-            ],
-        }
-    );
+    return;
 }
 
+sub is_valid
+{
+    my ($self) = @_;
+
+    my $config = $self->config();
+
+    # Validate the configuration
+    {
+        if (! exists ($config->{default_site}))
+        {
+            die "A 'default_site' key must be present in the configuration.";
+        }
+
+        my $sites = $config->{sites};
+        if (ref($sites) ne 'HASH')
+        {
+            die "sites key must be a hash.";
+        }
+
+        foreach my $name (_sorted_keys($sites))
+        {
+            $self->_validate_site($name, $sites->{$name});
+        }
+    }
+
+    return;
+}
 
 1;
 
@@ -80,47 +129,24 @@ __END__
 
 =head1 NAME
 
-App::Sky::Module - class that does the heavy lifting.
+App::Sky::Config::Validate - validate the configuration.
 
 =head1 VERSION
 
 version 0.0.4
 
+=encoding utf8
+
 =head1 METHODS
 
-=head2 $sky->base_upload_cmd()
+=head2 $self->config()
 
-Returns an array reference of strings of the upload command.
+The configuration to validate.
 
-=head2 $sky->dest_upload_prefix
+=head2 $self->is_valid()
 
-The upload prefix to upload to. So:
-
-    my $m = App::Sky::Module->new(
-        {
-            base_upload_cmd => [qw(rsync -a -v --progress --inplace)],
-            dest_upload_prefix => 'hostgator:public_html/',
-            dest_upload_url_prefix => 'http://www.shlomifish.org/',
-        }
-    );
-
-=head2 $sky->dest_upload_url_prefix
-
-The base URL where the uploads will be found.
-
-=head2 my $results = $sky->get_upload_results({ filenames => ["Shine4U.webm"], target_dir => "Files/files/video/" });
-
-Gives the recipe to execute for the upload commands.
-
-Returns a L<App::Sky::Results> reference containing:
-
-=over 4
-
-=item * upload_cmd
-
-The upload command to execute (as an array reference of strings).
-
-=back
+Determines if the configuration is valid. Throws an exception if not valid,
+and returns FALSE (in both list context and scalar context if it is valid.).
 
 =head1 AUTHOR
 
