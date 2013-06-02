@@ -18,6 +18,7 @@ testing_command = runtest
 [PruneCruft]
 [VersionFromModule]
 [MetaResources]
+homepage = http://www.shlomifish.org/open-source/projects/sky/
 bugtracker.web = http://rt.cpan.org/NoAuth/Bugs.html?Dist=App-Sky
 bugtracker.mailto = bug-app-sky@rt.cpan.org
 repository.url = git://github.com/shlomif/Sky-uploader.git

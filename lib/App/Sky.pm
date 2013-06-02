@@ -3,7 +3,7 @@ package App::Sky;
 use strict;
 use warnings;
 
-our $VERSION = '0.0.2';
+our $VERSION = '0.0.3';
 
 
 1;
@@ -19,7 +19,7 @@ download links.
 
 =head1 VERSION
 
-version 0.0.2
+version 0.0.3
 
 =head1 SYNOPSIS
 

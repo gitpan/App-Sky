@@ -19,7 +19,7 @@ my %module_build_args = (
     "Shlomi Fish <shlomif\@cpan.org>"
   ],
   "dist_name" => "App-Sky",
-  "dist_version" => "0.0.2",
+  "dist_version" => "0.0.3",
   "license" => "mit",
   "module_name" => "App::Sky",
   "recommends" => {},
@@ -34,6 +34,7 @@ my %module_build_args = (
     "List::Util" => 0,
     "Moo" => 0,
     "MooX" => 0,
+    "MooX::late" => "0.010",
     "Scalar::Util" => 0,
     "URI" => 0,
     "YAML::XS" => 0,

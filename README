@@ -1,7 +1,7 @@
 
 
 This archive contains the distribution App-Sky,
-version 0.0.2:
+version 0.0.3:
 
   wrapper to rsync/etc. to upload files to a remote server and give
 download links.
