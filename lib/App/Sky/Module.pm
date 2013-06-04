@@ -3,7 +3,7 @@ package App::Sky::Module;
 use strict;
 use warnings;
 
-our $VERSION = '0.0.5';
+our $VERSION = '0.0.6';
 
 
 use Carp ();
@@ -84,7 +84,7 @@ App::Sky::Module - class that does the heavy lifting.
 
 =head1 VERSION
 
-version 0.0.5
+version 0.0.6
 
 =head1 METHODS
 

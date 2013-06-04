@@ -3,7 +3,7 @@ package App::Sky::CmdLine;
 use strict;
 use warnings;
 
-our $VERSION = '0.0.5';
+our $VERSION = '0.0.6';
 
 
 use Carp ();
@@ -122,7 +122,7 @@ App::Sky::CmdLine - command line program
 
 =head1 VERSION
 
-version 0.0.5
+version 0.0.6
 
 =encoding utf8
 

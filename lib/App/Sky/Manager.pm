@@ -3,7 +3,7 @@ package App::Sky::Manager;
 use strict;
 use warnings;
 
-our $VERSION = '0.0.5';
+our $VERSION = '0.0.6';
 
 
 use Carp ();
@@ -17,6 +17,9 @@ use URI;
 use File::Basename qw(basename);
 
 use App::Sky::Module;
+
+# For defined-or - "//".
+use 5.010;
 
 has config => (isa => 'HashRef', is => 'ro',);
 
@@ -40,7 +43,7 @@ sub _calc_sect_name
     (first
         {
             my $re = $sections->{$_}->{basename_re};
-            $bn =~ /$re/
+            $bn =~ /$re/;
         }
         (keys(%$sections))
     );
@@ -126,7 +129,7 @@ App::Sky::Manager - manager for the configuration.
 
 =head1 VERSION
 
-version 0.0.5
+version 0.0.6
 
 =encoding utf8
 
