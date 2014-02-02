@@ -3,7 +3,7 @@ package App::Sky::Module;
 use strict;
 use warnings;
 
-our $VERSION = '0.0.6';
+our $VERSION = '0.0.7';
 
 
 use Carp ();
@@ -78,13 +78,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 App::Sky::Module - class that does the heavy lifting.
 
 =head1 VERSION
 
-version 0.0.6
+version 0.0.7
 
 =head1 METHODS
 

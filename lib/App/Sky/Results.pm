@@ -3,7 +3,7 @@ package App::Sky::Results;
 use strict;
 use warnings;
 
-our $VERSION = '0.0.6';
+our $VERSION = '0.0.7';
 
 
 use Carp ();
@@ -23,13 +23,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 App::Sky::Results - results of an upload.
 
 =head1 VERSION
 
-version 0.0.6
+version 0.0.7
 
 =head1 METHODS
 

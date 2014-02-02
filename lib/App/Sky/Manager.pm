@@ -3,7 +3,7 @@ package App::Sky::Manager;
 use strict;
 use warnings;
 
-our $VERSION = '0.0.6';
+our $VERSION = '0.0.7';
 
 
 use Carp ();
@@ -123,15 +123,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 App::Sky::Manager - manager for the configuration.
 
 =head1 VERSION
 
-version 0.0.6
-
-=encoding utf8
+version 0.0.7
 
 =head1 METHODS
 

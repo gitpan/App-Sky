@@ -3,7 +3,7 @@ package App::Sky;
 use strict;
 use warnings;
 
-our $VERSION = '0.0.6';
+our $VERSION = '0.0.7';
 
 
 1;
@@ -12,6 +12,8 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 App::Sky - wrapper to rsync/etc. to upload files to a remote server and give
@@ -19,7 +21,7 @@ download links.
 
 =head1 VERSION
 
-version 0.0.6
+version 0.0.7
 
 =head1 SYNOPSIS
 

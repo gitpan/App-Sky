@@ -3,7 +3,7 @@ package App::Sky::CmdLine;
 use strict;
 use warnings;
 
-our $VERSION = '0.0.6';
+our $VERSION = '0.0.7';
 
 
 use Carp ();
@@ -116,15 +116,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 App::Sky::CmdLine - command line program
 
 =head1 VERSION
 
-version 0.0.6
-
-=encoding utf8
+version 0.0.7
 
 =head1 METHODS
 
