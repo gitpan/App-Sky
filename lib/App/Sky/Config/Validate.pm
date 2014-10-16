@@ -3,7 +3,7 @@ package App::Sky::Config::Validate;
 use strict;
 use warnings;
 
-our $VERSION = '0.0.7';
+our $VERSION = '0.2.0';
 
 
 use Carp ();
@@ -135,7 +135,7 @@ App::Sky::Config::Validate - validate the configuration.
 
 =head1 VERSION
 
-version 0.0.7
+version 0.2.0
 
 =head1 METHODS
 

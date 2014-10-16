@@ -3,7 +3,7 @@ package App::Sky::CmdLine;
 use strict;
 use warnings;
 
-our $VERSION = '0.0.7';
+our $VERSION = '0.2.0';
 
 
 use Carp ();
@@ -59,10 +59,53 @@ sub run
         return $self->_basic_help();
     }
 
-    if (not (($verb eq 'up') || ($verb eq 'upload')))
+    my $_calc_manager = sub {
+        my $dist_config_dir = File::HomeDir->my_dist_config( 'App-Sky', {create => 1}, );
+
+        my $config_fn = File::Spec->catfile($dist_config_dir, 'app_sky_conf.yml');
+
+        my $config = LoadFile($config_fn);
+
+        my $validator = App::Sky::Config::Validate->new({ config => $config });
+        $validator->is_valid();
+
+        return App::Sky::Manager->new(
+            {
+                config => $config,
+            }
+        );
+    };
+
+    my $_handle_results = sub {
+        my ($results) = @_;
+
+        my $upload_cmd = $results->upload_cmd();
+        my $urls = $results->urls();
+
+        if ((system { $upload_cmd->[0] } @$upload_cmd) != 0)
+        {
+            die "Upload cmd <<@$upload_cmd>> failed with $!";
+        }
+
+        print "Got URL:\n" , $urls->[0]->as_string(), "\n";
+
+        exit(0);
+    };
+
+    my $op;
+    if ((($verb eq 'up') || ($verb eq 'upload')))
+    {
+        $op = 'upload';
+    }
+    elsif (($verb eq 'up-r') || ($verb eq 'upload-recursive'))
+    {
+        $op = "up-r";
+    }
+    else
     {
         return $self->_basic_usage();
     }
+
 
     # GetOptionsFromArray(
     #     $self->argv(),
@@ -70,44 +113,24 @@ sub run
 
     my $filename = shift(@{$self->argv()});
 
-    my $dist_config_dir = File::HomeDir->my_dist_config( 'App-Sky', {create => 1}, );
+    if (not (($op eq 'upload') ? (-f $filename) : (-d $filename)))
+    {
+        die "Can only upload directories. '$filename' is not a valid directory name.";
+    }
 
-    my $config_fn = File::Spec->catfile($dist_config_dir, 'app_sky_conf.yml');
+    my $meth = $op eq 'upload' ? 'get_upload_results' : 'get_recursive_upload_results';
 
-    my $config = LoadFile($config_fn);
-
-    my $validator = App::Sky::Config::Validate->new({ config => $config });
-    $validator->is_valid();
-
-    my $manager = App::Sky::Manager->new(
-        {
-            config => $config,
-        }
+    $_handle_results->(
+        scalar(
+            $_calc_manager->()->$meth(
+                {
+                    filenames => [$filename],
+                }
+            )
+        )
     );
 
-    if (! -f $filename)
-    {
-        die "Can only upload files. '$filename' is not a valid filename.";
-    }
-
-    my $results =
-        $manager->get_upload_results(
-            {
-                filenames => [$filename],
-            }
-        );
-
-    my $upload_cmd = $results->upload_cmd();
-    my $urls = $results->urls();
-
-    if ((system { $upload_cmd->[0] } @$upload_cmd) != 0)
-    {
-        die "Upload cmd <<@$upload_cmd>> failed with $!";
-    }
-
-    print "Got URL:\n" , $urls->[0]->as_string(), "\n";
-
-    exit(0);
+    return;
 }
 
 1;
@@ -124,7 +147,7 @@ App::Sky::CmdLine - command line program
 
 =head1 VERSION
 
-version 0.0.7
+version 0.2.0
 
 =head1 METHODS
 

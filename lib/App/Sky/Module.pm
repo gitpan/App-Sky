@@ -3,7 +3,7 @@ package App::Sky::Module;
 use strict;
 use warnings;
 
-our $VERSION = '0.0.7';
+our $VERSION = '0.2.0';
 
 
 use Carp ();
@@ -27,6 +27,8 @@ has dest_upload_url_prefix => (isa => 'Str', is => 'ro',);
 sub get_upload_results
 {
     my ($self, $args) = @_;
+
+    my $is_dir = ($args->{is_dir} // 0);
 
     my $filenames = $args->{filenames}
         or Carp::confess ("Missing argument 'filenames'");
@@ -65,6 +67,7 @@ sub get_upload_results
                     $self->dest_upload_url_prefix()
                     . $target_dir
                     . basename($filenames->[0])
+                    . ($is_dir ? '/' : '')
                 ),
             ],
         }
@@ -86,7 +89,7 @@ App::Sky::Module - class that does the heavy lifting.
 
 =head1 VERSION
 
-version 0.0.7
+version 0.2.0
 
 =head1 METHODS
 

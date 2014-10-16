@@ -3,7 +3,7 @@ package App::Sky::Results;
 use strict;
 use warnings;
 
-our $VERSION = '0.0.7';
+our $VERSION = '0.2.0';
 
 
 use Carp ();
@@ -31,7 +31,7 @@ App::Sky::Results - results of an upload.
 
 =head1 VERSION
 
-version 0.0.7
+version 0.2.0
 
 =head1 METHODS
 

@@ -3,7 +3,7 @@ package App::Sky::Manager;
 use strict;
 use warnings;
 
-our $VERSION = '0.0.7';
+our $VERSION = '0.2.0';
 
 
 use Carp ();
@@ -39,14 +39,26 @@ sub _calc_sect_name
 
     my $bn = $args->{basename};
 
-    my $sect_name = $args->{section} //
-    (first
+    my $sect_name = $args->{section};
+
+    if (!defined ($sect_name))
+    {
+        if ($args->{is_dir})
         {
-            my $re = $sections->{$_}->{basename_re};
-            $bn =~ /$re/;
+            $sect_name = $self->_calc_site_conf($args)->{dirs_section};
         }
-        (keys(%$sections))
-    );
+        else
+        {
+            $sect_name =
+            (first
+                {
+                    my $re = $sections->{$_}->{basename_re};
+                    $bn =~ /$re/;
+                }
+                (keys(%$sections))
+            );
+        }
+    }
 
     if (!defined( $sect_name ))
     {
@@ -79,10 +91,9 @@ sub _calc_target_dir
     }
 }
 
-
-sub get_upload_results
+sub _perform_upload_generic
 {
-    my ($self, $args) = @_;
+    my ($self, $is_dir, $args) = @_;
 
     my $filenames = $args->{filenames}
         or Carp::confess ("Missing argument 'filenames'");
@@ -105,15 +116,42 @@ sub get_upload_results
     my $fn = $filenames->[0];
     my $bn = basename($fn);
 
+    my @dir = ($is_dir ? (is_dir => 1) : ());
+
     return $backend->get_upload_results(
         {
-            filenames => $filenames,
+
+            filenames =>
+            (
+                $is_dir
+                ?  [map { my $s = $_; $s =~ s#/+\z##ms; $s } @$filenames ]
+                : $filenames,
+            ),
             target_dir => $self->_calc_target_dir({
                     %$args,
                     basename => $bn,
+                    @dir,
             }),
+            @dir,
         }
     );
+
+}
+
+
+sub get_upload_results
+{
+    my ($self, $args) = @_;
+
+    return $self->_perform_upload_generic(0, $args);
+}
+
+
+sub get_recursive_upload_results
+{
+    my ($self, $args) = @_;
+
+    return $self->_perform_upload_generic(1, $args);
 }
 
 
@@ -131,7 +169,7 @@ App::Sky::Manager - manager for the configuration.
 
 =head1 VERSION
 
-version 0.0.7
+version 0.2.0
 
 =head1 METHODS
 
@@ -157,6 +195,41 @@ one filename.
 An optional section that will override the target section. If not specified,
 the uploader will try to guess based on the file’s basename and the manager
 configuration.
+
+=item * 'target_dir'
+
+Overrides the target directory for the upload, to ignore that dictated by
+the sections. Should point to a string.
+
+=back
+
+Returns a L<App::Sky::Results> reference containing:
+
+=over 4
+
+=item * upload_cmd
+
+The upload command to execute (as an array reference of strings).
+
+=back
+
+=head2 my $results = $sky->get_recursive_upload_results({ filenames => ['/home/music/Music/mp3s/Basic Desire/'], });
+
+Gives the recipe to execute for the recursive upload commands.
+
+Accepts one argument that is a hash reference with these keys:
+
+=over 4
+
+=item * 'filenames'
+
+An array reference containing paths to directories. Currently only supports
+one filename.
+
+=item * 'section'
+
+An optional section that will override the target section. If not specified,
+the uploader will try to use the 'dirs_section' section.
 
 =item * 'target_dir'
 

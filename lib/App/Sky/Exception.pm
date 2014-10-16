@@ -6,7 +6,7 @@ use warnings;
 
 use vars qw($VERSION);
 
-$VERSION = '0.0.7';
+$VERSION = '0.2.0';
 
 use Exception::Class (
     'App::Sky::Exception',
@@ -32,7 +32,7 @@ App::Sky::Exception - provides various exception classes for App::Sky
 
 =head1 VERSION
 
-version 0.0.7
+version 0.2.0
 
 =head1 SYNOPSIS
 
