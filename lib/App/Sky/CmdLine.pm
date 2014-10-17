@@ -3,7 +3,7 @@ package App::Sky::CmdLine;
 use strict;
 use warnings;
 
-our $VERSION = '0.2.0';
+our $VERSION = '0.2.1';
 
 
 use Carp ();
@@ -30,6 +30,7 @@ sub _basic_help
 
     print <<'EOF';
 sky upload /path/to/myfile.txt
+sky up-r /path/to/directory
 EOF
 
     exit(0);
@@ -147,7 +148,7 @@ App::Sky::CmdLine - command line program
 
 =head1 VERSION
 
-version 0.2.0
+version 0.2.1
 
 =head1 METHODS
 
